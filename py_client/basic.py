@@ -1,7 +1,7 @@
 import requests
 
 # endpoint = "https://httpbin.org/status/200"
-endpoint = "https://httpbin.org/anything"
+endpoint = "http://localhost:8000"
 
 
 # a cool thing about python request  library is that we can pass my own json file
@@ -24,7 +24,7 @@ print(
     get_response.text
 )  # this will fetch the source code from the internet in text format
 
-print(get_response.json())  # this give us back a python dictionary data
+# print(get_response.json())  # this give us back a python dictionary data
 """
 we see that the data that we sent in a json type of a python dictionary is echoed back 
 so this is how we are going to play with data 
