@@ -1,7 +1,7 @@
 import requests
 
 # endpoint = "https://httpbin.org/status/200"
-endpoint = "http://localhost:8000"
+endpoint = "http://localhost:8000/api/"
 
 
 # a cool thing about python request  library is that we can pass my own json file
@@ -31,3 +31,4 @@ so this is how we are going to play with data
 """
 
 print(get_response.status_code)
+print(get_response.json()["Message"])
