@@ -6,7 +6,7 @@ endpoint = "http://localhost:8000/api/"
 
 # a cool thing about python request  library is that we can pass my own json file
 get_response = requests.get(
-    endpoint, json={"mydata": "Hello Python Developer"}
+    endpoint, params={"abc": 123}, json={"Pravin": "Python Full Stack Developer"}
 )  # this is an HTTP request
 """
 HTTP Request -> HTML [a http request will get a html response] [request made for browsers or the humans]
@@ -20,9 +20,12 @@ REST API HTTP Request -> JSON (.XML) [a rest api send a response in a JSON forma
 Javascript Object Notation(JSON) ~ Python Dict
 
 """  # type:ignore
-print(
-    get_response.text
-)  # this will fetch the source code from the internet in text format
+print("\n\n")
+print(get_response.json())
+print("\n\n")
+# print(
+#     get_response.text
+# )  # this will fetch the source code from the internet in text format
 
 # print(get_response.json())  # this give us back a python dictionary data
 """
@@ -30,5 +33,4 @@ we see that the data that we sent in a json type of a python dictionary is echoe
 so this is how we are going to play with data 
 """
 
-print(get_response.status_code)
-print(get_response.json()["Message"])
+# print(get_response.status_code)
