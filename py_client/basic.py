@@ -5,9 +5,7 @@ endpoint = "http://localhost:8000/api/"
 
 
 # a cool thing about python request  library is that we can pass my own json file
-get_response = requests.get(
-    endpoint, params={"abc": 123}, json={"Pravin": "Python Full Stack Developer"}
-)  # this is an HTTP request
+get_response = requests.get(endpoint)  # this is an HTTP request
 """
 HTTP Request -> HTML [a http request will get a html response] [request made for browsers or the humans]
 
@@ -20,10 +18,12 @@ REST API HTTP Request -> JSON (.XML) [a rest api send a response in a JSON forma
 Javascript Object Notation(JSON) ~ Python Dict
 
 """  # type:ignore
-print("\n\n")
+print("\n")
 print(get_response.json())
-print("\n\n")
-# print(
+print("\n")
+# # print(get_response.url)
+# print("\n\n")
+# # print(
 #     get_response.text
 # )  # this will fetch the source code from the internet in text format
 
