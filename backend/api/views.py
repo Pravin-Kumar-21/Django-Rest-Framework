@@ -3,6 +3,8 @@ from django.http import JsonResponse, HttpResponse
 import json
 from django.forms.models import model_to_dict
 from products import models as product_models
+from rest_framework.decorators import api_view
+from rest_framework.response import responses, Response
 
 
 # Create your views here.
@@ -14,7 +16,16 @@ returning a Jsonresponse(data dictionary) to the client ...
 """
 
 
+@api_view(["GET", "POST"])
 def api_home(request, *args, **kwargs):
+    client = {}
+    try:
+        client = json.loads(request.body)
+    except:
+        pass
+    print("\n")
+    print(client)
+    print("\n")
     model_data = product_models.Product.objects.all().order_by("?").first()
     data = {}
     if model_data:
@@ -28,4 +39,4 @@ def api_home(request, *args, **kwargs):
         data = model_to_dict(
             model_data, fields={"id", "title", "price"}
         )  # this will do the same work as we did manually by creating a dictionary
-    return JsonResponse(data)
+    return Response(data)
