@@ -16,26 +16,36 @@ returning a Jsonresponse(data dictionary) to the client ...
 """
 
 
-@api_view(["GET"])
+@api_view(["POST"])
 def api_home(request, *args, **kwargs):
     # client = {}
     # try:
     #     client = json.loads(request.body)
     # except:
     #     pass
+    # print(client)
 
-    """Django Rest Framework API View"""
-    instance = product_models.Product.objects.all().order_by("?").first()
-    data = {}
-    if instance:
-        # data["id"] = model_data.id
-        # data["title"] = model_data.title
-        # data["content"] = model_data.content
-        # data["Price"] = model_data.price
-        """
-        instead of writing so much code we just need to use the model_to_method
-        """
-        data = ProductSerializers(
-            instance
-        ).data  # this will do the same work as we did manually by creating a dictionary
-    return Response(data)
+    # """Django Rest Framework API View"""
+    # instance = product_models.Product.objects.all().order_by("?").first()
+    # data = {}
+    # if instance:
+    #     # data["id"] = model_data.id
+    #     # data["title"] = model_data.title
+    #     # data["content"] = model_data.content
+    #     # data["Price"] = model_data.price
+    #     """
+    #     instead of writing so much code we just need to use the model_to_method
+    #     """
+    #     data = ProductSerializers(
+    #         instance
+    #     ).data  # this will do the same work as we did manually by creating a dictionary
+    serializer = ProductSerializers(data=request.data)
+    if serializer.is_valid():
+        print("\n")
+        instance = (
+            serializer.save()
+        )  # similar to instance= form.save() in django forms , only thiong we cannot do is (commit = false)
+        print(serializer.data)
+        print("\n")
+        data = serializer.data
+        return Response(data)
