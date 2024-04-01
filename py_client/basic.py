@@ -7,7 +7,7 @@ endpoint = "http://localhost:8000/api/"
 # a cool thing about python request  library is that we can pass my own json file
 get_response = requests.post(
     endpoint,
-    json={"title": "Realme Mobiles"},
+    json={"title": None, "content": "Realme Mobiles"},
 )  # this is an HTTP request
 """
 HTTP Request -> HTML [a http request will get a html response] [request made for browsers or the humans]
@@ -23,6 +23,7 @@ Javascript Object Notation(JSON) ~ Python Dict
 """  # type:ignore
 print("\n")
 print(get_response.json())
+print(get_response.status_code)
 print("\n")
 # # print(get_response.url)
 # print("\n\n")

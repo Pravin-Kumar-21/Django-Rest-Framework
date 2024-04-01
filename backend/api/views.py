@@ -16,6 +16,12 @@ returning a Jsonresponse(data dictionary) to the client ...
 """
 
 
+"""
+Serializer and Views are the most critical
+part of DjangoRestframework
+"""
+
+
 @api_view(["POST"])
 def api_home(request, *args, **kwargs):
     # client = {}
@@ -39,13 +45,15 @@ def api_home(request, *args, **kwargs):
     #     data = ProductSerializers(
     #         instance
     #     ).data  # this will do the same work as we did manually by creating a dictionary
-    serializer = ProductSerializers(data=request.data)
-    if serializer.is_valid():
+    serializer = ProductSerializers(data=request.data)  #
+    if serializer.is_valid(raise_exception=True):
         print("\n")
-        instance = (
+        # in the beow line when we write serializer.save() we just make an instance of class Product
+        print(
             serializer.save()
         )  # similar to instance= form.save() in django forms , only thiong we cannot do is (commit = false)
         print(serializer.data)
         print("\n")
         data = serializer.data
         return Response(data)
+    # return Response({"invalid": "not good data"}, status=400) {if we want to treat the error according to our needs then we need declare  it like this}
