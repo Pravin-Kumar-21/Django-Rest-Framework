@@ -4,10 +4,10 @@ from . import views
 urlpatterns = [
     path(
         "<int:pk>/",
-        views.ProductDetailAPIView.as_view(),
+        views.product_alt_view,
     ),
     path(
         "",
-        views.ProductListCreateAPIView.as_view(),
+        views.product_alt_view,
     ),
 ]
