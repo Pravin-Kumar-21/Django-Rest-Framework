@@ -8,6 +8,6 @@ urlpatterns = [
     ),
     path(
         "",
-        views.ProductCreateAPIView.as_view(),
+        views.ProductListCreateAPIView.as_view(),
     ),
 ]

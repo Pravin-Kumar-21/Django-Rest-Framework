@@ -11,7 +11,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     # we can create urls with unique id followed by a /
 
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
 
@@ -26,3 +26,13 @@ class ProductCreateAPIView(generics.CreateAPIView):
         print("\n\n")
         print(serializer.data.get("content"))
         print("\n\n")
+
+
+class ProductListAPIView(generics.ListAPIView):
+    """
+    I am Not Gonna Use this Method
+    instead i am going to create same API view of Create and list
+    """
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
