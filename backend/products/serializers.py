@@ -17,7 +17,11 @@ class ProductSerializers(serializers.ModelSerializer):
         ]
 
     def get_discount(self, obj):
-        return obj.get_discount()
+        try:
+            if discount:
+                return obj.get_discount()
+        except:
+            pass
 
 
 # One more thing is that we can as many serializers according to our need , and multiple serializers can be of the
