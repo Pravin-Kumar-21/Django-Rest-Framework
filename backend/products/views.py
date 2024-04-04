@@ -10,7 +10,7 @@ from django.http import Http404
 class ProductDetailAPIView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-
+    # lookup Feild = pk ???
     # we should try to to pass something like a pk integer that is read by the url and then
     # we can create urls with unique id followed by a /
 
@@ -35,20 +35,78 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
 class ProductListAPIView(generics.ListAPIView):
     """
     I am Not Gonna Use this Method
-    instead i am going to create same API view of Create and list
+    instead i am going to create same API view of Create and list ^|^|^|^|
     """
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
 
 
+#  class Based view for Product Update Api View
+class ProductUpdateAPIView(generics.UpdateAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    lookup_feild = "pk"
+
+    """This function is created by me i have used the concept of validated_data that is given by the serializer
+    and then i just grab the object using the filter command and then i just change the value and just saved it
+    """
+
+    def Perform_Update(self, serializer):
+        instance = Product.objects.filter(self.lookup_feild)
+        if serializer.validated_data:
+            instance.title = serializer.validated_data.get("title")
+            instance.content = serializer.validated_data.get("content")
+        instance.save()
+        return Response(data=instance)
+
+    """
+    This is the function to perform update that is done by the documentation way
+
+    "
+        class ProductUpdateAPIView(generics.UpdateAPIView):
+        queryset = Product.objects.all()
+        serializer_class = ProductSerializers
+        lookup_feild = "pk"
+
+        def Perform_Update(self, serializer):
+            instance = serializer.save()
+            if not instance.content:
+                instance.content = instance.title
+            return Response(data=instance)
+    
+    "
+
+
+    """
+
+
 """
             This is a Function based View For Get and Post Requests
             this is how i have also done in my previous project for 
-            Get and Post Requests 
+            Get and Post Requests , Similiarly we can Update Details of an 
+            object by using the PUT method and also we can Destroy an object using the
+            Destroy Method
 """
 
+# Now we are going to create destroy method
 
+
+class ProductDestroyAPIView(generics.DestroyAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    lookup_feild = "pk"
+    print(lookup_feild)
+
+    def Perform_destroy(self, instance):
+        # instance
+        data = instance
+        super().perform_destroy(instance)
+        return Response(data)
+
+
+# we can perform a complete crud operation using the logic method
+# But good developer does not advises to use this type of method because of its hazy logic
 @api_view(["GET", "POST"])
 def product_alt_view(request, pk=None, *args, **kwargs):
     method = request.method
