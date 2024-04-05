@@ -9,6 +9,6 @@ except:
 
 endpoint = f"http://localhost:8000/api/products/{product_id}/delete/"
 
-get_response = requests.delete(endpoint)
+get_response = requests.delete(endpoint, json=product_id)
 print("\n")
 print(get_response.status_code, get_response.status_code == 204)

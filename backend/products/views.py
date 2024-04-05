@@ -1,10 +1,12 @@
-from rest_framework import generics
+from rest_framework import generics, mixins
 from .models import Product
 from .serializers import ProductSerializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+
+# from django.views.generic import
 
 
 class ProductDetailAPIView(generics.RetrieveAPIView):
@@ -15,6 +17,7 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
     # we can create urls with unique id followed by a /
 
 
+# --------------------------------------------------------------------------------------------------------------------
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
@@ -42,6 +45,7 @@ class ProductListAPIView(generics.ListAPIView):
     serializer_class = ProductSerializers
 
 
+# -----------------------------------------------------------------------------------------------------------------
 #  class Based view for Product Update Api View
 class ProductUpdateAPIView(generics.UpdateAPIView):
     queryset = Product.objects.all()
@@ -88,15 +92,13 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
             object by using the PUT method and also we can Destroy an object using the
             Destroy Method
 """
+# ----------------------------------------------------------------------------------------------------------------
+
 
 # Now we are going to create destroy method
-
-
 class ProductDestroyAPIView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    lookup_feild = "pk"
-    print(lookup_feild)
 
     def Perform_destroy(self, instance):
         # instance
@@ -105,6 +107,40 @@ class ProductDestroyAPIView(generics.DestroyAPIView):
         return Response(data)
 
 
+# -------------------------------------------------------------------------------------------------
+# Mixins and GenericAPI View
+# Complete Crud Operation using ProductMixinView
+class ProductMixinView(
+    mixins.ListModelMixin,
+    generics.GenericAPIView,
+    mixins.RetrieveModelMixin,
+    mixins.CreateModelMixin,
+):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializers
+    lookup_field = "pk"
+
+    def get(self, request, *args, **kwargs):  # http:// --> get
+        pk = kwargs.get("pk")
+        if pk is not None:
+            return self.retrieve(request, *args, **kwargs)
+        print(args, kwargs)
+        return self.list(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        return self.create(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
+
+
+#   def post(): http:// -->post
+
+
+# ---------------------------------------------------------------------------------------------------
 # we can perform a complete crud operation using the logic method
 # But good developer does not advises to use this type of method because of its hazy logic
 @api_view(["GET", "POST"])
