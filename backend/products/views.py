@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins
+from rest_framework import generics, mixins, authentication, permissions
 from .models import Product
 from .serializers import ProductSerializers
 from rest_framework.decorators import api_view
@@ -19,8 +19,11 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 
 # --------------------------------------------------------------------------------------------------------------------
 class ProductListCreateAPIView(generics.ListCreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [authentication.SessionAuthentication]
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
+    # now we are moving to session and authentication
 
     def perform_create(self, serializer):
         # serialzer.save (user=self.request.user)

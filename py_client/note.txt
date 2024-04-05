@@ -1,0 +1,18 @@
+while working with the Session and Authentication we have delared the
+session and Authentication in the server views.py file but what about the client Files 
+
+We also need to make sure that the client File also find that the session is active and the
+user is authenticated or not 
+
+So what do we need to do we need basically to get to the authenticated Endpoint 
+
+
+
+
+for eg:
+http://localhost:8000/admin
+session then it will check for active session -> post data
+selenium that will check for active session 
+
+
+but this not necessary for vast majority of Api when you want to expose the third party users.
