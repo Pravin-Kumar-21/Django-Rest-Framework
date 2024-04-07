@@ -1,17 +1,27 @@
 import requests
+from getpass import getpass
+
+auth_endpoint = "http://localhost:8000/api/auth/"
+username = input("Enter Username\n")
+password = getpass()
 
 endpoint = "http://localhost:8000/api/products/"
-get_response = requests.get(endpoint)
-print("\n")
-data = {}
-data = get_response.json()  # converts json file to python Dictionary
-# for i in data:
-#     print(i.get("title"))
-#     print(i.get("content"))
-#     print(i.get("price"))
-#     print(i.get("sale_price"))
-#     print(i.get("discount"))
-#     print("\n")
-# print(get_response.status_code)
+auth_response = requests.post(
+    auth_endpoint, json={"username": username, "password": password}
+)
+print(auth_response.json())
+token = auth_response.json()["token"]
+headers = {"Authorization": f"Bearer {token}"}  # Added space after "Token"
 
-print(data)
+get_response = requests.get(endpoint, headers=headers)
+data = get_response.json()
+# print(data)
+for item in data:
+    print("------")
+    for key, value in item.items():
+        if isinstance(value, dict):  # Check if the value is a dictionary
+            print(f"{key}:")
+            for nested_key, nested_value in value.items():
+                print(f"  {nested_key}: {nested_value}")
+        else:
+            print(f"{key}: {value}")

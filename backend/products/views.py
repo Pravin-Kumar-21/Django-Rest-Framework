@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.http import Http404
-
+from api.authentication import TokenAuthentication
 from . import permissions
 
 # from django.views.generic import
@@ -26,7 +26,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         DjangoPermissions.IsAdminUser,
         permissions.IsStaffEditorPermission,
     ]
-    authentication_classes = [authentication.SessionAuthentication]
+    authentication_classes = [
+        authentication.SessionAuthentication,
+        TokenAuthentication,
+    ]
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     # now we are moving to session and authentication
