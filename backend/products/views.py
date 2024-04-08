@@ -7,12 +7,17 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from api.authentication import TokenAuthentication
-from . import permissions
+
+# from api.permissions import IsStaffEditorPermission we can remove this and
+from api.mixins import StaffEditorPermissionsMixin
 
 # from django.views.generic import
 
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
+class ProductDetailAPIView(
+    generics.RetrieveAPIView,
+    StaffEditorPermissionsMixin,
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     # lookup Feild = pk ???
@@ -21,15 +26,10 @@ class ProductDetailAPIView(generics.RetrieveAPIView):
 
 
 # --------------------------------------------------------------------------------------------------------------------
-class ProductListCreateAPIView(generics.ListCreateAPIView):
-    permission_classes = [
-        DjangoPermissions.IsAdminUser,
-        permissions.IsStaffEditorPermission,
-    ]
-    authentication_classes = [
-        authentication.SessionAuthentication,
-        TokenAuthentication,
-    ]
+class ProductListCreateAPIView(
+    generics.ListCreateAPIView,
+    StaffEditorPermissionsMixin,
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     # now we are moving to session and authentication
@@ -47,7 +47,10 @@ class ProductListCreateAPIView(generics.ListCreateAPIView):
         print("\n\n")
 
 
-class ProductListAPIView(generics.ListAPIView):
+class ProductListAPIView(
+    generics.ListAPIView,
+    StaffEditorPermissionsMixin,
+):
     """
     I am Not Gonna Use this Method
     instead i am going to create same API view of Create and list ^|^|^|^|
@@ -108,7 +111,10 @@ class ProductUpdateAPIView(generics.UpdateAPIView):
 
 
 # Now we are going to create destroy method
-class ProductDestroyAPIView(generics.DestroyAPIView):
+class ProductDestroyAPIView(
+    generics.DestroyAPIView,
+    StaffEditorPermissionsMixin,
+):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
 
@@ -127,6 +133,7 @@ class ProductMixinView(
     generics.GenericAPIView,
     mixins.RetrieveModelMixin,
     mixins.CreateModelMixin,
+    StaffEditorPermissionsMixin,
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
