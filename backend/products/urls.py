@@ -17,14 +17,21 @@ list_instance = ProductGenericViewSet.as_view({"get": "list"})
 """
 
 urlpatterns = [
-    path(
-        "<int:pk>/",
-        viewsets.ProductGenericViewSet.as_view({"get": "retrieve"}),
-    ),
-    path(
-        "",
-        viewsets.ProductGenericViewSet.as_view({"get": "list"}),
-    ),
-    path("<int:pk>/update/", views.ProductUpdateAPIView.as_view()),
+    path("<int:pk>/", views.ProductDetailAPIView.as_view(), name="Product-detail"),
+    path("", views.ProductListCreateAPIView.as_view(), name="Product-list"),
+    path("<int:pk>/update/", views.ProductUpdateAPIView.as_view(), name="Product-edit"),
     path("<int:pk>/delete/", views.ProductDestroyAPIView.as_view()),
 ]
+"""
+
+# path(
+#     "<int:pk>/",
+#     viewsets.ProductGenericViewSet.as_view({"get": "retrieve"}),
+# ),
+# path(
+#     "",
+#     viewsets.ProductGenericViewSet.as_view({"get": "list"}),
+# )
+
+We declare this when we are using the viewsets file to create urls for the products and all
+"""

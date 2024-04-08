@@ -62,7 +62,7 @@ class ProductListAPIView(
 
 # -----------------------------------------------------------------------------------------------------------------
 #  class Based view for Product Update Api View
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(generics.UpdateAPIView, generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     lookup_feild = "pk"
