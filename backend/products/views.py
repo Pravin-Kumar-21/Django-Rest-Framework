@@ -37,6 +37,8 @@ class ProductListCreateAPIView(
     def perform_create(self, serializer):
         # serialzer.save (user=self.request.user)
         print(serializer.validated_data)
+        email = serializer.validated_data.pop("email")
+        print(email)
         title = serializer.validated_data.get("title")
         content = serializer.validated_data.get("content")
         if content is None:
@@ -45,6 +47,13 @@ class ProductListCreateAPIView(
         print("\n\n")
         print(serializer.data.get("content"))
         print("\n\n")
+
+
+"""
+You need to understand this very carefully that create an update work 
+conjuctionally while updation create method also work ...
+updation -> value Updated -> creation of new object
+"""
 
 
 class ProductListAPIView(
@@ -73,6 +82,12 @@ class ProductUpdateAPIView(generics.UpdateAPIView, generics.RetrieveAPIView):
 
     def Perform_Update(self, serializer):
         instance = Product.objects.filter(self.lookup_feild)
+        try:
+            email = serializer.validated_data.get("email")
+            if email is not None:
+                instance.email = serializer.validated_data.get("email")
+        except:
+            raise ValueError
         if serializer.validated_data:
             instance.title = serializer.validated_data.get("title")
             instance.content = serializer.validated_data.get("content")

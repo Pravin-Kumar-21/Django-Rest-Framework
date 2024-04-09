@@ -10,10 +10,13 @@ class ProductSerializers(serializers.ModelSerializer):
     url = serializers.HyperlinkedIdentityField(
         view_name="Product-detail", lookup_field="pk"
     )
+    # Suppose we want to send one email when a instance is created so you see how we are going to do it
+    email = serializers.EmailField(write_only=True)
 
     class Meta:
         model = Product
         fields = [
+            "email",
             "url",
             "edit_url",
             "pk",
@@ -38,6 +41,15 @@ class ProductSerializers(serializers.ModelSerializer):
         if request is None:
             return None
         return reverse("Product-edit", kwargs={"pk": obj.pk}, request=request)
+
+    def create(self, validated_data):
+        obj = super().create(validated_data)
+        return obj
+
+    def update(self, instance, validated_data):
+        email = validated_data.pop("email")
+        instance.title = validated_data.get("title")
+        return super().update(instance, validated_data)
 
 
 # One more thing is that we can as many serializers according to our need , and multiple serializers can be of the
