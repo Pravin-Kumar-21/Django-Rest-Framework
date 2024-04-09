@@ -1,6 +1,9 @@
+# One more thing is that we can as many serializers according to our need , and multiple serializers can be of the
+# of the same model class and we can create it as per our needs
 from rest_framework import serializers
 from .models import Product
 from rest_framework.reverse import reverse
+from .validators import unique_product_title, no_samsung_title
 
 
 class ProductSerializers(serializers.ModelSerializer):
@@ -12,6 +15,9 @@ class ProductSerializers(serializers.ModelSerializer):
     )
     # Suppose we want to send one email when a instance is created so you see how we are going to do it
     email = serializers.EmailField(write_only=True)
+    title = serializers.CharField(
+        validators=[unique_product_title, no_samsung_title]
+    )  # this will do the same stuff as that of validating_title
 
     class Meta:
         model = Product
@@ -51,6 +57,19 @@ class ProductSerializers(serializers.ModelSerializer):
         instance.title = validated_data.get("title")
         return super().update(instance, validated_data)
 
+    """"
+    Now it will become very tedious if we use the validate each and 
+    every atrribute of the seralizers and models.py so what we can do is 
+    we can create validators.py file in the app so that whenever we want to validate
+    some attribute we can just import the validator classess and then we can 
+    just use these accordingly 
+    
 
-# One more thing is that we can as many serializers according to our need , and multiple serializers can be of the
-# of the same model class and we can create it as per our needs
+    """
+
+    def validate_title(self, value):
+        user = request.user
+        query = Product.objects.filter(user=user, title__iexact=value)
+        if query.exists():
+            raise serializers.ValidationError(f"{value} is already a product name")
+        return value
