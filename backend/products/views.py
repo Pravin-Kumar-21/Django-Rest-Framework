@@ -5,21 +5,23 @@ from .serializers import ProductSerializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
-from django.http import Http404
+from django.http import Http404, request
 from api.authentication import TokenAuthentication
 
 # from api.permissions import IsStaffEditorPermission we can remove this and
-from api.mixins import StaffEditorPermissionsMixin
+from api.mixins import StaffEditorPermissionsMixin, UserQuerySetmixin
 
 # from django.views.generic import
 
 
 class ProductDetailAPIView(
+    UserQuerySetmixin,
     generics.RetrieveAPIView,
     StaffEditorPermissionsMixin,
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
+    allow_staff_view = False
     # lookup Feild = pk ???
     # we should try to to pass something like a pk integer that is read by the url and then
     # we can create urls with unique id followed by a /
@@ -27,11 +29,13 @@ class ProductDetailAPIView(
 
 # --------------------------------------------------------------------------------------------------------------------
 class ProductListCreateAPIView(
+    UserQuerySetmixin,
     generics.ListCreateAPIView,
     StaffEditorPermissionsMixin,
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
+    allow_staff_view = False
     # now we are moving to session and authentication
 
     def perform_create(self, serializer):
@@ -43,10 +47,20 @@ class ProductListCreateAPIView(
         content = serializer.validated_data.get("content")
         if content is None:
             content = title
-        serializer.save(content=content)
+        serializer.save(user=self.request.user, content=content)
         print("\n\n")
         print(serializer.data.get("content"))
         print("\n\n")
+
+    def get_queryset(self, *args, **kwargs):
+        qs = super().get_queryset(*args, **kwargs)
+        request = self.request
+        # print(dir(request))
+        user = request.user
+        print(request.user)
+        if not user.is_authenticated:
+            return Product.objects.none()
+        return qs.filter(user=user)
 
 
 """
@@ -57,6 +71,7 @@ updation -> value Updated -> creation of new object
 
 
 class ProductListAPIView(
+    UserQuerySetmixin,
     generics.ListAPIView,
     StaffEditorPermissionsMixin,
 ):
@@ -67,6 +82,7 @@ class ProductListAPIView(
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
+    allow_staff_view = False
 
 
 # -----------------------------------------------------------------------------------------------------------------
@@ -172,6 +188,9 @@ class ProductMixinView(
 
 
 #   def post(): http:// -->post
+
+#  in the view it is request = self.request
+#
 
 
 # ---------------------------------------------------------------------------------------------------

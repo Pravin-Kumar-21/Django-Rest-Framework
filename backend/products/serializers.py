@@ -4,6 +4,7 @@ from rest_framework import serializers
 from .models import Product
 from rest_framework.reverse import reverse
 from .validators import unique_product_title, no_samsung_title
+from rest_framework import generics, mixins, authentication
 
 
 class ProductSerializers(serializers.ModelSerializer):
@@ -22,6 +23,7 @@ class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
+            "user",
             "email",
             "url",
             "edit_url",
@@ -68,6 +70,7 @@ class ProductSerializers(serializers.ModelSerializer):
     """
 
     def validate_title(self, value):
+        request = self.context.get("request")
         user = request.user
         query = Product.objects.filter(user=user, title__iexact=value)
         if query.exists():

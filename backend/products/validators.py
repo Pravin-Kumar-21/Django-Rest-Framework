@@ -31,7 +31,9 @@ the serializer file according to our needs
 
 """
 #  the below line of code is similar to the function that i have created in the above file
-unique_product_title = UniqueValidator(Product.objects.all())
+unique_product_title = UniqueValidator(Product.objects.all(), lookup="iexact")
+# the above line state that all the product that is being created irrespective of different user must hold a unique product
+#  suppose if User1 has
 
 
 # we can do custom validation purely upon our need just like in the above section i
