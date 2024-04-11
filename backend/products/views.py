@@ -22,7 +22,7 @@ class ProductDetailAPIView(
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
     # allow_staff_view = False
-    # lookup Feild = pk ???
+    lookup_feild = "pk"
     # we should try to to pass something like a pk integer that is read by the url and then
     # we can create urls with unique id followed by a /
 

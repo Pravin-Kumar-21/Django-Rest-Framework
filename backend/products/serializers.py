@@ -5,7 +5,8 @@ from .models import Product
 from rest_framework.reverse import reverse
 from .validators import unique_product_title, no_samsung_title
 from rest_framework import generics, mixins, authentication
-from api.serializers import UserPublicSerializer
+
+# from api.serializers import UserPublicSerializer
 
 """See now i have created a Product inline Serializer now i will jus have to create a new feild
     in the Product Serializer class that will display mmy all of my ProductInlineSerializer Class 
@@ -21,8 +22,7 @@ from api.serializers import UserPublicSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
-    owner = UserPublicSerializer(source="user", read_only=True)
-    discount = serializers.SerializerMethodField(read_only=True)
+    # owner = UserPublicSerializer(source="user", read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(source="user", read_only=True)
     # related_products = ProductInlineSerializer(
@@ -42,7 +42,7 @@ class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
-            "owner",
+            # "owner",
             "user",
             "email",
             "url",
@@ -52,16 +52,16 @@ class ProductSerializers(serializers.ModelSerializer):
             "content",
             "price",
             "sale_price",
-            "discount",
+            # "discount",
             # "related_products",
         ]
 
-    def get_discount(self, obj):
-        try:
-            if discount:
-                return obj.get_discount()
-        except:
-            pass
+    # def get_discount(self, obj):
+    #     try:
+    #         if discount:
+    #             return obj.get_discount()
+    #     except:
+    #         pass
 
     def get_user(self, obj):
         return obj.user.username

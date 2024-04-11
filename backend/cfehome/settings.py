@@ -135,4 +135,10 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly"  # GET method available for everyone can view
     ],  # Default permission class
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 5,
 }
+""" 
+Unlike in Django MVT Structure here in the Django Rest Framework we can
+create our Default page size using the concept of pagination
+"""
