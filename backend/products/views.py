@@ -21,7 +21,7 @@ class ProductDetailAPIView(
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    allow_staff_view = False
+    # allow_staff_view = False
     # lookup Feild = pk ???
     # we should try to to pass something like a pk integer that is read by the url and then
     # we can create urls with unique id followed by a /
@@ -35,7 +35,7 @@ class ProductListCreateAPIView(
 ):
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    allow_staff_view = False
+    # allow_staff_view = False
     # now we are moving to session and authentication
 
     def perform_create(self, serializer):
@@ -82,7 +82,7 @@ class ProductListAPIView(
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializers
-    allow_staff_view = False
+    # allow_staff_view = False
 
 
 # -----------------------------------------------------------------------------------------------------------------

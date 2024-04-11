@@ -5,16 +5,19 @@ from .models import Product
 from rest_framework.reverse import reverse
 from .validators import unique_product_title, no_samsung_title
 from rest_framework import generics, mixins, authentication
+from api.serializers import UserPublicSerializer
 
 
 class ProductSerializers(serializers.ModelSerializer):
+    owner = UserPublicSerializer(source="user", read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
+    user = serializers.SerializerMethodField(source="user", read_only=True)
     # obj = Product.objects.all().order_by("?").first()
-    url = serializers.HyperlinkedIdentityField(
-        view_name="Product-detail", lookup_field="pk"
-    )
-    # Suppose we want to send one email when a instance is created so you see how we are going to do it
+    # url = serializers.HyperlinkedIdentityField(
+    #     view_name="Product-detail", lookup_field="pk"
+    # )
+    # # Suppose we want to send one email when a instance is created so you see how we are going to do it
     email = serializers.EmailField(write_only=True)
     title = serializers.CharField(
         validators=[unique_product_title, no_samsung_title]
@@ -23,6 +26,7 @@ class ProductSerializers(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = [
+            "owner",
             "user",
             "email",
             "url",
@@ -41,6 +45,9 @@ class ProductSerializers(serializers.ModelSerializer):
                 return obj.get_discount()
         except:
             pass
+
+    def get_user(self, obj):
+        return obj.user.username
 
     #  Now this function defination is
     def get_edit_url(self, obj):
