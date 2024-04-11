@@ -11,12 +11,8 @@ class UserProductInlineSerializer(serializers.Serializer):
 class UserPublicSerializer(serializers.Serializer):
     username = serializers.CharField(read_only=True)
     id = serializers.IntegerField(read_only=True)
+    other_products = serializers.SerializerMethodField(read_only=True)
 
-
-""" 
-So  this is how we create a nested data using serializers 
-
-   other_products = serializers.SerializerMethodField(read_only=True)
     def get_other_products(self, obj):
         request = self.context.get("request")
         print(obj)
@@ -25,4 +21,16 @@ So  this is how we create a nested data using serializers
         return UserProductInlineSerializer(
             my_products_qs, many=True, context=self.context
         ).data
+
+
+""" 
+So  this is how we create a nested data using serializers 
+
+"""
+
+"""
+Remember this thing we could also do in the serializer file 
+
+
+I will show you how ->>
 """

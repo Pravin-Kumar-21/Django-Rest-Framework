@@ -7,16 +7,32 @@ from .validators import unique_product_title, no_samsung_title
 from rest_framework import generics, mixins, authentication
 from api.serializers import UserPublicSerializer
 
+"""See now i have created a Product inline Serializer now i will jus have to create a new feild
+    in the Product Serializer class that will display mmy all of my ProductInlineSerializer Class 
+    Attribute now 
+# """
+
+
+# class ProductInlineSerializer(serializers.Serializer):
+#     url = serializers.HyperlinkedIdentityField(
+#         view_name="product-detail", lookup_field="pk", read_only=True
+#     )
+#     title = serializers.CharField(read_only=True)
+
 
 class ProductSerializers(serializers.ModelSerializer):
     owner = UserPublicSerializer(source="user", read_only=True)
     discount = serializers.SerializerMethodField(read_only=True)
     edit_url = serializers.SerializerMethodField(read_only=True)
     user = serializers.SerializerMethodField(source="user", read_only=True)
-    # obj = Product.objects.all().order_by("?").first()
-    # url = serializers.HyperlinkedIdentityField(
-    #     view_name="Product-detail", lookup_field="pk"
+    # related_products = ProductInlineSerializer(
+    #     source="product_set.all()", read_only=True, many=True
     # )
+    """this is not working for a while we will see to it later |^|^|^"""
+    # obj = Product.objects.all().order_by("?").first()
+    url = serializers.HyperlinkedIdentityField(
+        view_name="Product-detail", lookup_field="pk"
+    )
     # # Suppose we want to send one email when a instance is created so you see how we are going to do it
     email = serializers.EmailField(write_only=True)
     title = serializers.CharField(
@@ -37,6 +53,7 @@ class ProductSerializers(serializers.ModelSerializer):
             "price",
             "sale_price",
             "discount",
+            # "related_products",
         ]
 
     def get_discount(self, obj):
