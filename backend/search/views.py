@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework import generics
 from products.models import Product
-from product.serializers import ProductSerializers
+from products.serializers import ProductSerializers
 
 # Create your views here.
 
@@ -12,4 +12,11 @@ class SearchListView(generics.ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         qs = super().get_queryset(*args, **kwargs)
-        return super().get_queryset(*args, **kwargs)
+        q = self.request.GET.get("q")
+        results = Product.objects.none()
+        if q is not None:
+            user = None
+            if self.request.user.is_authenticated:
+                user = self.request.user
+                results = qs.search(q, user=user)
+        return results

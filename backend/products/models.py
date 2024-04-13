@@ -15,9 +15,10 @@ class ProductQueryset(models.QuerySet):
 
     def search(self, query, user=None):
         lookup = Q(title__icontains=query) | Q(content__icontains=query)
-        qs = self.is_public.filter(lookup)
+        qs = self.is_public().filter(lookup)
         if user is not None:
-            qs = self.filter(user=user)
+            qs2 = self.filter(user=user).filter(lookup)
+            qs = (qs | qs2).distinct()
         return qs
 
 
