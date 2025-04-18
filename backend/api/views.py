@@ -25,8 +25,8 @@ def api_home(request, *args, **kwargs):
     #     pass
 
     """Django Rest Framework API View"""
-    instance = product_models.Product.objects.all().order_by("?").first()
-    data = {}
+    instance = product_models.Product.objects.all()
+    all_data = []
     if instance:
         # data["id"] = model_data.id
         # data["title"] = model_data.title
@@ -35,7 +35,12 @@ def api_home(request, *args, **kwargs):
         """
         instead of writing so much code we just need to use the model_to_method
         """
-        data = ProductSerializers(
-            instance
-        ).data  # this will do the same work as we did manually by creating a dictionary
-    return Response(data)
+        for i in instance:
+            data = ProductSerializers(
+                i
+            ).data  # this will do the same work as we did manually by creating a dictionary
+            all_data.append(data)
+
+    return Response(
+        {"status": "success", "data": all_data, "message": "Fetched successfully"}
+    )

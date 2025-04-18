@@ -9,7 +9,14 @@ class Product(models.Model):
 
     @property
     def sale_price(self):
+        # 20% discount on the original price
         return "%.2f" % (float(self.price) * 0.8)
 
+    @sale_price.setter
+    def sale_price(self, value):
+        # If someone sets sale_price, update the real price accordingly
+        self.price = float(value) / 0.8
+
     def get_discount(self):
-        return "122"
+        # Returns 20% of the original price
+        return "%.2f" % (float(self.price) * 0.2)
